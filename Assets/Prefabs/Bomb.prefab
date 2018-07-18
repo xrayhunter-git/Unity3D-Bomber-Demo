@@ -222,6 +222,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   explosion_prefab: {fileID: 0}
+  minDamage: 0
+  maxDamage: 0
+  radiusOfDamage: 0
   destroyOnImpact: 1
   clip: {fileID: 0}
 --- !u!136 &136537037536420584
