@@ -1,0 +1,41 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: wavingGrass
+  m_Shader: {fileID: 4800000, guid: 7f77d6371c2d2204caa11569f06c6de4, type: 3}
+  m_ShaderKeywords: 
+  m_LightmapFlags: 5
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: 3000
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _MainTex:
+        m_Texture: {fileID: 2800000, guid: 98aa0f34d68509c459a94c69c499196e, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Floats:
+    - _BendByView: 0.5
+    - _Cutoff: 0.5
+    - _GrassBottom: 0
+    - _GrassTop: 1
+    - _WaveAndDistanceW: 54.37
+    - _WaveAndDistanceY: 20
+    - _WaveAndDistanceZ: 0.75
+    - _WaveAndDistortion: 1
+    - _WaveFrequency: 20
+    - _WaveSpeed: 2
+    - _mul1: -1
+    m_Colors:
+    - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _WavingTintDarken: {r: 0.39986253, g: 0.415, b: 0.361465, a: 0.5}
+    - _WavingTintLighten: {r: 0.709, g: 0.62900525, b: 0.41901895, a: 0.5}
+    - _WavingTint_Mod: {r: 0.63235295, g: 0.52076125, b: 0.52076125, a: 0.5}
