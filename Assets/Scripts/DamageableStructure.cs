@@ -22,11 +22,17 @@ namespace WWIIBuilding
 
     public class DamageableStructure : MonoBehaviour
     {
-        public List<StructureInfo> structureStages;
+        //public List<StructureInfo> structureStages;
+
+        // Temporary until gets fixed...
+        public StructureInfo healthyStage;
+        public StructureInfo unhealthyStage;
 
         public bool destroyOnDeath = false;
 
-        private float health;
+        public float maxHealth = 100;
+
+        public float health;
 
         private float lastHealth;
 
@@ -35,8 +41,11 @@ namespace WWIIBuilding
 	    // Use this for initialization
 	    void Start ()
         {
-            if (structureStages != null && structureStages.Count > 0) // Should be the healthiest.
-                displayObject = Instantiate(GrabNextStructure(), this.transform);
+            health = maxHealth;
+            //if (structureStages != null && structureStages.Count > 0) // Should be the healthiest.
+            //displayObject = Instantiate(GrabNextStructure().prefab, this.transform);
+            if (healthyStage != null && healthyStage.prefab != null)
+                displayObject = Instantiate(healthyStage.prefab, this.transform);
 
             if (displayObject != null)
                 displayObject.name = "Display Object";
@@ -47,15 +56,25 @@ namespace WWIIBuilding
         {
 		    if (health != lastHealth) // Stop the spam.
             {
-                GameObject newDisplayObject = GrabNextStructure();
+                /*StructureInfo newDisplayObject = GrabNextStructure();
+                
+                Destroy(displayObject.gameObject);
+                displayObject = Instantiate(newDisplayObject.prefab, this.transform);
+                */
 
-                if (newDisplayObject != displayObject)
+                StructureInfo info = healthyStage;
+
+                if (health <= 50)
                 {
-                    Destroy(displayObject.gameObject);
-                    displayObject = Instantiate(newDisplayObject, this.transform);
+                    info = unhealthyStage;
                 }
 
-
+                if (displayObject != null && info != null && info.prefab != null)
+                {
+                    Destroy(displayObject.gameObject);
+                    displayObject = Instantiate(info.prefab, this.transform);
+                }
+                
                 if (displayObject != null)
                     displayObject.name = "Display Object";
 
@@ -69,20 +88,23 @@ namespace WWIIBuilding
             health -= damage;
         }
 
-        private GameObject GrabNextStructure()
+        /*private StructureInfo GrabNextStructure()
         {
-            GameObject result = structureStages[0].prefab;
+            StructureInfo result = structureStages[0];
 
-            for (int i = 0; i < structureStages.Count; i++)
+            structureStages.Sort((x, y) => -x.health.CompareTo(y.health));
+
+            foreach(StructureInfo info in structureStages)
             {
-                if (structureStages[i].health < health)
+                if(info.health >= health)
                 {
-                    return structureStages[i].prefab;
+                    return info;
                 }
             }
 
             return result;
         }
+        */
     }
 
 }
