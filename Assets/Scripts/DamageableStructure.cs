@@ -8,15 +8,16 @@ namespace WWIIBuilding
     public class Debre
     {
         public GameObject prefab;
-        public List<GameObject> debreEffects;
-        public int health;
+        public float deletionDelay = 60.0f;
+        public Vector3 offsets;
     }
 
     [System.Serializable]
     public class StructureInfo
     {
         public GameObject prefab;
-        public List<GameObject> debreEffects;
+        public List<Debre> debreEffects_damaged;
+        public List<Debre> debreEffects_destruction;
         public int health;
     }
 
@@ -37,6 +38,10 @@ namespace WWIIBuilding
         private float lastHealth;
 
         private GameObject displayObject;
+
+        private Vector3 lastHitpoint;
+
+        private StructureInfo lastPrefab;
 
 	    // Use this for initialization
 	    void Start ()
@@ -69,6 +74,18 @@ namespace WWIIBuilding
                     info = unhealthyStage;
                 }
 
+                if (info != lastPrefab)
+                {
+                    foreach (Debre debre in info.debreEffects_destruction)
+                    {
+                        GameObject obj = Instantiate(debre.prefab, this.transform.position + debre.offsets, debre.prefab.transform.rotation);
+                        
+                        Destroy(obj, debre.deletionDelay);
+                    }
+
+                    lastPrefab = info;
+                }
+
                 if (displayObject != null && info != null && info.prefab != null)
                 {
                     Destroy(displayObject.gameObject);
@@ -78,14 +95,25 @@ namespace WWIIBuilding
                 if (displayObject != null)
                     displayObject.name = "Display Object";
 
+                if (lastHitpoint != null)
+                {
+                    foreach (Debre debre in info.debreEffects_damaged)
+                    {
+                        GameObject obj = Instantiate(debre.prefab, this.lastHitpoint, debre.prefab.transform.rotation);
+
+                        Destroy(obj, debre.deletionDelay);
+                    }
+                }
+
                 lastHealth = health;
             }
 
 	    }
 
-        public void Damage(float damage)
+        public void Damage(float damage, Vector3 hitpoint = new Vector3())
         {
             health -= damage;
+            lastHitpoint = hitpoint;
         }
 
         /*private StructureInfo GrabNextStructure()

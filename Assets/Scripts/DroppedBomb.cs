@@ -19,6 +19,8 @@ namespace WWIIBomber
 
         private bool exploded = false;
 
+        private GameObject explosionFX;
+
         private void OnCollisionEnter(Collision collision) // Collision Trigger...
         {
             if (collision != null) // Safety guard...
@@ -27,7 +29,7 @@ namespace WWIIBomber
                 {
                     if (!exploded)
                     {
-                        GameObject explosionFX = Instantiate(explosion_prefab, this.transform.position, this.transform.rotation); // Create effect.
+                        explosionFX = Instantiate(explosion_prefab, this.transform.position, this.transform.rotation); // Create effect.
 
                         if (clip != null)
                         {
