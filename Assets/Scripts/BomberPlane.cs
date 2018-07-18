@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
 
-namespace WWIIBomber
+namespace xrayhunter.WWIIBomber
 {
     [System.Serializable]
     public class BombData
@@ -21,7 +21,7 @@ namespace WWIIBomber
         public float radiusOfDamage = 20.0f;
     }
 
-    [RequireComponent(typeof(GameObject))]
+    [RequireComponent(typeof(GameObject), typeof(LineRenderer))]
     public class BomberPlane : MonoBehaviour
     {
         public int paddingTime = 5;
@@ -34,13 +34,17 @@ namespace WWIIBomber
         public bool AIBomber = true;
         public bool AIBombBayEnabled = true;
 
+        public int AIPredictions = 3;
+
+        public int AIMoveOnTimeout = 60;
+
         public List<Transform> dropPayloads;
 
         public List<BombData> bombs;
 
         public bool unlimitedAmmo = true;
 
-        public float bombYOffset = 5.0f;
+        public Vector3 bombBayOffset = new Vector3();
 
         public float bombSpacing = 2.0f;
 
@@ -53,10 +57,14 @@ namespace WWIIBomber
         private float bombReleaseCounter = 0.0f;
 
         private int waypointCounter = 0;
+        private float lastWaypointTime = 0;
 
         private int bombDropCounter = 0;
 
         private float speed = 5.0f;
+
+        private float rotationSpeed;
+
 
         void Start()
         {
@@ -80,13 +88,13 @@ namespace WWIIBomber
 
                     foreach (Transform dropPayload in dropPayloads)
                     {
-                        if (Vector3.Distance(this.transform.position, dropPayload.position) <= paddingTime + 10 + bombs.Count)
+                        if (Vector3.Distance(this.transform.position, dropPayload.position) <= paddingTime + 10 + bombs.Count + speed)
                         {
                             // Start dropping payload.
                             if (bombReleaseCounter <= 0)
                             {
                                 BombData bombData = GetNextBomb(); // Gets a random next bomb.
-                                GameObject bomb = Instantiate(bombData.prefab, this.transform.position + new Vector3(bombSpacing * (bombDropCounter % 2 == 0 ? -1 : 1), -this.bombYOffset, Random.Range(0, 2)), Quaternion.Euler(90.0f, this.transform.rotation.y, this.transform.rotation.z));
+                                GameObject bomb = Instantiate(bombData.prefab, this.transform.position + new Vector3(bombSpacing * (bombDropCounter % 2 == 0 ? -1 : 1), 0, Random.Range(0, 2)) + bombBayOffset, Quaternion.Euler(90.0f, this.transform.rotation.y, this.transform.rotation.z));
 
                                 DroppedBomb bombInfo = bomb.GetComponent<DroppedBomb>();
                                 bombInfo.explosion_prefab = bombData.explosion_prefab;
@@ -112,6 +120,7 @@ namespace WWIIBomber
 
             if (AIBomber)
             {
+                lastWaypointTime -= Time.deltaTime;
                 if (waypoints != null && waypoints.Length > 0)
                 {
                     if (waypointCounter < waypoints.Length && waypoints[waypointCounter] != null)
@@ -122,7 +131,7 @@ namespace WWIIBomber
 
                             float distance = Vector3.Distance(this.transform.position, waypoints[waypointCounter]);
 
-                            float rotationSpeed = Mathf.Clamp(distance * rotationSpeedMin, rotationSpeedMin, rotationSpeedMax);
+                            rotationSpeed = Mathf.Clamp(distance * rotationSpeedMin, rotationSpeedMin, rotationSpeedMax);
 
                             Quaternion rotation = Quaternion.LookRotation(waypoints[waypointCounter] - transform.position);
 
@@ -133,7 +142,9 @@ namespace WWIIBomber
 
                         transform.Translate(Vector3.forward * Time.deltaTime * speed);
 
-                        if (Vector3.Distance(this.transform.position, waypoints[waypointCounter]) <= 10)
+                        lastWaypointTime = AIMoveOnTimeout;
+
+                        if (Vector3.Distance(this.transform.position, waypoints[waypointCounter]) <= 10 + speed || lastWaypointTime <= 0)
                         {
                             waypointCounter++;
                         }
@@ -182,7 +193,7 @@ namespace WWIIBomber
             if (dropPayloads != null)
             {
                 foreach (Transform dropPayload in dropPayloads)
-                    Gizmos.DrawWireSphere(dropPayload.transform.position, paddingTime + 10 + bombAmount);
+                    Gizmos.DrawWireSphere(dropPayload.transform.position, paddingTime + 10 + bombAmount + speed);
             }
 
             Gizmos.color = Color.yellow;
@@ -194,7 +205,8 @@ namespace WWIIBomber
 
             Gizmos.color = Color.red;
 
-            Gizmos.DrawWireCube(this.transform.position + new Vector3(0, -bombYOffset, 0), new Vector3(bombSpacing * 2, 0, 2));
+            Gizmos.DrawWireCube(this.transform.position + bombBayOffset, new Vector3(bombSpacing * 2, 0, 2));
+            
         }
     }
 }

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace WWIIBomber
+namespace xrayhunter.WWIIBomber
 {
     public class DroppedBomb : MonoBehaviour
     {

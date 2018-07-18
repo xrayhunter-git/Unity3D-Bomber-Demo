@@ -2,78 +2,83 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(AudioSource))]
-public class AirAlarm : MonoBehaviour {
-
-    public float RadarDetectionRadius = 500.0f;
-
-    public float ScanTimer = 5.0f;
-
-    public AudioClip alarm;
-
-    private float ScanCounter = 0.0f;
-
-    private AudioSource source;
-
-    private bool needingToPlay = false;
-
-	// Use this for initialization
-	void Start ()
+namespace xrayhunter.WWIIAlarms
+{
+    [RequireComponent(typeof(AudioSource))]
+    public class AirAlarm : MonoBehaviour
     {
-        source = GetComponent<AudioSource>();
-        source.spatialBlend = 1;
-        source.loop = true;
 
-        if (alarm != null)
-            source.clip = alarm;
-    }
-	
-	// Update is called once per frame
-	void Update ()
-    {
-        ScanCounter -= Time.deltaTime;
-        if (ScanCounter <= 0)
+        public float RadarDetectionRadius = 500.0f;
+
+        public float ScanTimer = 5.0f;
+
+        public AudioClip alarm;
+
+        private float ScanCounter = 0.0f;
+
+        private AudioSource source;
+
+        private bool needingToPlay = false;
+
+        // Use this for initialization
+        void Start()
         {
-            needingToPlay = false;
-            Collider[] hitColliders = Physics.OverlapSphere(this.transform.position, RadarDetectionRadius);
+            source = GetComponent<AudioSource>();
+            source.spatialBlend = 1;
+            source.loop = true;
 
-            foreach(Collider collider in hitColliders)
+            if (alarm != null)
+                source.clip = alarm;
+        }
+
+        // Update is called once per frame
+        void Update()
+        {
+            ScanCounter -= Time.deltaTime;
+            if (ScanCounter <= 0)
             {
-                if (collider.GetComponent<WWIIBomber.BomberPlane>() != null)
+                needingToPlay = false;
+                Collider[] hitColliders = Physics.OverlapSphere(this.transform.position, RadarDetectionRadius);
+
+                foreach (Collider collider in hitColliders)
                 {
-                    needingToPlay = true;
+                    if (collider.GetComponent<WWIIBomber.BomberPlane>() != null)
+                    {
+                        needingToPlay = true;
+                    }
                 }
-            }
-            if (needingToPlay)
-            {
-                if (source.clip != null && !source.isPlaying)
-                    source.Play();
+                if (needingToPlay)
+                {
+                    if (source.clip != null && !source.isPlaying)
+                        source.Play();
 
-                source.volume = 1.0f;
-            }
-            else
-                StartCoroutine(FadeOut(0.01f));
-            
+                    source.volume = 1.0f;
+                }
+                else
+                    StartCoroutine(FadeOut(0.01f));
 
-            ScanCounter = ScanTimer;
+
+                ScanCounter = ScanTimer;
+            }
+
         }
 
-    }
-
-    private void OnDrawGizmosSelected()
-    {
-        Gizmos.DrawWireSphere(this.transform.position, RadarDetectionRadius);
-    }
-
-    private IEnumerator FadeOut (float speed)
-    {
-        while (source.volume > 0.0f)
+        private void OnDrawGizmosSelected()
         {
-            source.volume -= speed;
-            yield return new WaitForSeconds(0.1f);
+            Gizmos.DrawWireSphere(this.transform.position, RadarDetectionRadius);
         }
 
-        if (source.volume == 0.0f)
-            source.Stop();
+        private IEnumerator FadeOut(float speed)
+        {
+            while (source.volume > 0.0f)
+            {
+                source.volume -= speed;
+                yield return new WaitForSeconds(0.1f);
+            }
+
+            if (source.volume == 0.0f)
+                source.Stop();
+        }
     }
+
 }

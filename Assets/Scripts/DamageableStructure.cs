@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace WWIIBuilding
+namespace xrayhunter.WWIIBuilding
 {
     [System.Serializable]
     public class Debre
@@ -46,6 +46,7 @@ namespace WWIIBuilding
 	    // Use this for initialization
 	    void Start ()
         {
+            lastPrefab = healthyStage;
             health = maxHealth;
             //if (structureStages != null && structureStages.Count > 0) // Should be the healthiest.
             //displayObject = Instantiate(GrabNextStructure().prefab, this.transform);
