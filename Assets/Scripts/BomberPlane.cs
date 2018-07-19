@@ -99,7 +99,7 @@ namespace xrayhunter.WWIIBomber
 
                                 if (bombData.prefab != null)
                                 {
-                                    GameObject bomb = Instantiate(bombData.prefab, this.transform.position + new Vector3(bombSpacing * (bombDropCounter % 2 == 0 ? -1 : 1), 0, Random.Range(0, 2)) + bombBayOffset, Quaternion.Euler(90.0f, this.transform.rotation.y, this.transform.rotation.z));
+                                    GameObject bomb = Instantiate(bombData.prefab, this.transform.position + new Vector3(bombSpacing * (bombDropCounter % 2 == 0 ? -1 : 1), 0, Random.Range(0, 2)) + bombBayOffset, Quaternion.Euler(this.transform.position.x, 45, this.transform.rotation.z));
 
                                     DroppedBomb bombInfo = bomb.GetComponent<DroppedBomb>();
                                     bombInfo.explosion_prefab = bombData.explosion_prefab;

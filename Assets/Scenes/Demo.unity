@@ -13,7 +13,7 @@ OcclusionCullingSettings:
 --- !u!104 &2
 RenderSettings:
   m_ObjectHideFlags: 0
-  serializedVersion: 8
+  serializedVersion: 9
   m_Fog: 0
   m_FogColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
   m_FogMode: 3
@@ -38,7 +38,8 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028334, g: 0.22571328, b: 0.3069217, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
+  m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -54,11 +55,10 @@ LightmapSettings:
     m_EnableBakedLightmaps: 1
     m_EnableRealtimeLightmaps: 1
   m_LightmapEditorSettings:
-    serializedVersion: 9
+    serializedVersion: 10
     m_Resolution: 2
     m_BakeResolution: 40
-    m_TextureWidth: 1024
-    m_TextureHeight: 1024
+    m_AtlasSize: 1024
     m_AO: 0
     m_AOMaxDistance: 1
     m_CompAOExponent: 1
@@ -172,6 +172,7 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RenderingLayerMask: 4294967295
   m_Materials:
   - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
   m_StaticBatchInfo:
@@ -357,72 +358,96 @@ AudioSource:
   rolloffCustomCurve:
     serializedVersion: 2
     m_Curve:
-    - serializedVersion: 2
+    - serializedVersion: 3
       time: 0.11511129
       value: 1
       inSlope: -8.690732
       outSlope: -8.690732
       tangentMode: 0
-    - serializedVersion: 2
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
       time: 0.23022258
       value: 0.5
       inSlope: -2.172683
       outSlope: -2.172683
       tangentMode: 0
-    - serializedVersion: 2
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
       time: 0.46044517
       value: 0.25
       inSlope: -0.54317075
       outSlope: -0.54317075
       tangentMode: 0
-    - serializedVersion: 2
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
       time: 0.7512431
       value: 0.10858154
       inSlope: -0.13579269
       outSlope: -0.13579269
       tangentMode: 0
-    - serializedVersion: 2
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
       time: 1
       value: 0.0034779906
       inSlope: -0.115157105
       outSlope: -0.115157105
       tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
   panLevelCustomCurve:
     serializedVersion: 2
     m_Curve:
-    - serializedVersion: 2
+    - serializedVersion: 3
       time: 0
       value: 0
       inSlope: 0
       outSlope: 0
       tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
   spreadCustomCurve:
     serializedVersion: 2
     m_Curve:
-    - serializedVersion: 2
+    - serializedVersion: 3
       time: 0
       value: 0
       inSlope: 0
       outSlope: 0
       tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
   reverbZoneMixCustomCurve:
     serializedVersion: 2
     m_Curve:
-    - serializedVersion: 2
+    - serializedVersion: 3
       time: 0
       value: 1
       inSlope: 0
       outSlope: 0
       tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
@@ -483,17 +508,21 @@ MonoBehaviour:
   healthyStage:
     prefab: {fileID: 1418571016652894, guid: 80ac00a6b41e2f34b87dd10d8e2e2dd1, type: 2}
     offset: {x: 0, y: 0, z: 0}
-    destruction_offset: {x: 0, y: -50, z: 0}
+    destruction_offset: {x: 0, y: -10, z: 0}
+    deleteWhenReachedOffset: 0
     destruction_speed: 0.02
     debreEffects_damaged: []
     debreEffects_destruction: []
-    delaySwitch: 20
+    delaySwitch: 0
     health: 0
+    damagedClips: []
+    destroyedClips: []
   unhealthyStage:
     prefab: {fileID: 1390183093977470, guid: 3e1a8cd1d4498a641bb75f1a18792b7e, type: 2}
     offset: {x: -6.5, y: 0, z: 1.5}
-    destruction_offset: {x: 0, y: -50, z: 0}
-    destruction_speed: 0.02
+    destruction_offset: {x: 0, y: -10, z: 0}
+    deleteWhenReachedOffset: 0
+    destruction_speed: 2
     debreEffects_damaged:
     - prefab: {fileID: 1257544319874780, guid: 3d6755cd205c1814a893f96ca90057a0, type: 2}
       deletionDelay: 5
@@ -504,6 +533,8 @@ MonoBehaviour:
       offsets: {x: -3.25, y: 5, z: -5}
     delaySwitch: 20
     health: 0
+    damagedClips: []
+    destroyedClips: []
   destroyOnDeath: 0
   maxHealth: 100
   health: 100
@@ -658,12 +689,98 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1197991682}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -4.5, y: 1, z: -18.3}
+  m_LocalRotation: {x: -0, y: 0.99432623, z: -0, w: 0.10637371}
+  m_LocalPosition: {x: -3.54, y: 1, z: 16.1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 167.787, z: 0}
+--- !u!1 &1393492309
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 1393492312}
+  - component: {fileID: 1393492311}
+  - component: {fileID: 1393492310}
+  m_Layer: 0
+  m_Name: Building Example (1)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!65 &1393492310
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1393492309}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1393492311
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1393492309}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d8e0129d261cfb243981154c4519be64, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  healthyStage:
+    prefab: {fileID: 1418571016652894, guid: 80ac00a6b41e2f34b87dd10d8e2e2dd1, type: 2}
+    offset: {x: 0, y: 0, z: 0}
+    destruction_offset: {x: 0, y: -10, z: 0}
+    deleteWhenReachedOffset: 0
+    destruction_speed: 0.02
+    debreEffects_damaged: []
+    debreEffects_destruction: []
+    delaySwitch: 0
+    health: 0
+    damagedClips: []
+    destroyedClips: []
+  unhealthyStage:
+    prefab: {fileID: 1390183093977470, guid: 3e1a8cd1d4498a641bb75f1a18792b7e, type: 2}
+    offset: {x: -6.5, y: 0, z: 1.5}
+    destruction_offset: {x: 0, y: -10, z: 0}
+    deleteWhenReachedOffset: 0
+    destruction_speed: 2
+    debreEffects_damaged:
+    - prefab: {fileID: 1257544319874780, guid: 3d6755cd205c1814a893f96ca90057a0, type: 2}
+      deletionDelay: 5
+      offsets: {x: 0, y: 0, z: 0}
+    debreEffects_destruction:
+    - prefab: {fileID: 1119487697541066, guid: c11e16b12659d3d449670ce85f75f2e3, type: 2}
+      deletionDelay: 15
+      offsets: {x: -3.25, y: 5, z: -5}
+    delaySwitch: 20
+    health: 0
+    damagedClips: []
+    destroyedClips: []
+  destroyOnDeath: 0
+  maxHealth: 100
+  health: 100
+--- !u!4 &1393492312
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1393492309}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.44, y: 0, z: -2}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2040949318
 GameObject:
@@ -709,6 +826,7 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RenderingLayerMask: 4294967295
   m_Materials:
   - {fileID: 2100000, guid: a090e685ca435da468177ae34a427220, type: 2}
   m_StaticBatchInfo:
