@@ -14,6 +14,8 @@ namespace xrayhunter.WWIIBomber
 
         [Range(0, 100)]
         public int chanceOfSpawn;
+
+        public float effectDeletionDelay = 5.0f;
         
         public float minDamage = 50.0f;
         public float maxDamage = 100.0f;
@@ -94,24 +96,30 @@ namespace xrayhunter.WWIIBomber
                             if (bombReleaseCounter <= 0)
                             {
                                 BombData bombData = GetNextBomb(); // Gets a random next bomb.
-                                GameObject bomb = Instantiate(bombData.prefab, this.transform.position + new Vector3(bombSpacing * (bombDropCounter % 2 == 0 ? -1 : 1), 0, Random.Range(0, 2)) + bombBayOffset, Quaternion.Euler(90.0f, this.transform.rotation.y, this.transform.rotation.z));
 
-                                DroppedBomb bombInfo = bomb.GetComponent<DroppedBomb>();
-                                bombInfo.explosion_prefab = bombData.explosion_prefab;
-                                bombInfo.clip = bombData.audio;
-                                bombInfo.minDamage = bombData.minDamage;
-                                bombInfo.maxDamage = bombData.maxDamage;
-                                bombInfo.radiusOfDamage = bombData.radiusOfDamage;
+                                if (bombData.prefab != null)
+                                {
+                                    GameObject bomb = Instantiate(bombData.prefab, this.transform.position + new Vector3(bombSpacing * (bombDropCounter % 2 == 0 ? -1 : 1), 0, Random.Range(0, 2)) + bombBayOffset, Quaternion.Euler(90.0f, this.transform.rotation.y, this.transform.rotation.z));
 
-                                bombReleaseCounter = bombReleaseDelay;
+                                    DroppedBomb bombInfo = bomb.GetComponent<DroppedBomb>();
+                                    bombInfo.explosion_prefab = bombData.explosion_prefab;
+                                    bombInfo.clip = bombData.audio;
+                                    bombInfo.minDamage = bombData.minDamage;
+                                    bombInfo.maxDamage = bombData.maxDamage;
+                                    bombInfo.radiusOfDamage = bombData.radiusOfDamage;
+                                    bombInfo.effectDeletionDelay = bombData.effectDeletionDelay;
 
-                                bombDropCounter++;
-                                if (bombDropCounter > 5)
-                                    bombDropCounter = 0;
+                                    bombReleaseCounter = bombReleaseDelay;
 
-                                speed = Mathf.Lerp(speed, speedMin, Time.deltaTime);
+                                    bombDropCounter++;
+                                    if (bombDropCounter > 5)
+                                        bombDropCounter = 0;
 
-                                Destroy(bomb, 60); // Despawn after 60 seconds to clear memory.
+                                    speed = Mathf.Lerp(speed, speedMin, Time.deltaTime);
+
+                                    Destroy(bomb, 60); // Despawn after 60 seconds to clear memory.
+                                }
+
                             }
                         }
                     }

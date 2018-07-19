@@ -13,6 +13,8 @@ namespace xrayhunter.WWIIBomber
 
         public float radiusOfDamage;
 
+        public float effectDeletionDelay;
+
         public bool destroyOnImpact = true;
 
         public AudioClip clip;
@@ -72,7 +74,7 @@ namespace xrayhunter.WWIIBomber
                                 Destroy(this.GetComponent<Rigidbody>());
                         }
 
-                        Destroy(explosionFX, 60); // Clean up effects that are laying around.
+                        Destroy(explosionFX, effectDeletionDelay); // Clean up effects that are laying around.
                     }
                 }
             }

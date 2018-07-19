@@ -16,8 +16,12 @@ namespace xrayhunter.WWIIBuilding
     public class StructureInfo
     {
         public GameObject prefab;
+        public Vector3 offset;
+        public Vector3 destruction_offset;
+        public float destruction_speed = 5.0f;
         public List<Debre> debreEffects_damaged;
         public List<Debre> debreEffects_destruction;
+        public int delaySwitch = 0;
         public int health;
     }
 
@@ -41,6 +45,7 @@ namespace xrayhunter.WWIIBuilding
 
         private Vector3 lastHitpoint;
 
+        private GameObject destroyedObject;
         private StructureInfo lastPrefab;
 
 	    // Use this for initialization
@@ -60,6 +65,13 @@ namespace xrayhunter.WWIIBuilding
 	    // Update is called once per frame
 	    void Update ()
         {
+            if(destroyedObject != null && lastPrefab != null)
+            {
+                Debug.Log(destroyedObject.transform.position);
+                Debug.Log(lastPrefab.destruction_offset);
+                destroyedObject.transform.position = Vector3.Lerp(destroyedObject.transform.position, lastPrefab.destruction_offset, Time.deltaTime * lastPrefab.destruction_speed);
+            }
+
 		    if (health != lastHealth) // Stop the spam.
             {
                 /*StructureInfo newDisplayObject = GrabNextStructure();
@@ -80,21 +92,31 @@ namespace xrayhunter.WWIIBuilding
                     foreach (Debre debre in info.debreEffects_destruction)
                     {
                         GameObject obj = Instantiate(debre.prefab, this.transform.position + debre.offsets, debre.prefab.transform.rotation);
-                        
+                        obj.transform.parent = this.transform;
                         Destroy(obj, debre.deletionDelay);
                     }
-
+                    destroyedObject = displayObject;
                     lastPrefab = info;
                 }
 
                 if (displayObject != null && info != null && info.prefab != null)
                 {
-                    Destroy(displayObject.gameObject);
-                    displayObject = Instantiate(info.prefab, this.transform);
+                    if (lastPrefab.delaySwitch == 0)
+                    {
+                        Destroy(displayObject.gameObject);
+                    }
+                    else
+                    {
+                        Destroy(displayObject.gameObject, lastPrefab.delaySwitch);
+                    }
+                    displayObject = Instantiate(info.prefab, this.transform.position + info.offset, info.prefab.transform.rotation);
                 }
                 
                 if (displayObject != null)
+                {
                     displayObject.name = "Display Object";
+                    displayObject.transform.parent = this.transform;
+                }
 
                 if (lastHitpoint != null)
                 {

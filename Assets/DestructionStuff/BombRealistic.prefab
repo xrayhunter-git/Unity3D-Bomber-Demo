@@ -22,9 +22,9 @@ GameObject:
   - component: {fileID: 33260534463891306}
   - component: {fileID: 23723107350724078}
   - component: {fileID: 65486098542223012}
-  - component: {fileID: 114943509928414100}
   - component: {fileID: 96787964306657198}
   - component: {fileID: 54773351004017456}
+  - component: {fileID: 114292898154829994}
   m_Layer: 0
   m_Name: BombRealistic
   m_TagString: Untagged
@@ -39,7 +39,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1116644725694488}
   m_LocalRotation: {x: 0, y: -0.7071068, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: -6.7588987, y: 0.77397954, z: 26.591396}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 6, y: 6, z: 6}
   m_Children: []
   m_Father: {fileID: 0}
@@ -58,7 +58,6 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
-  m_RenderingLayerMask: 4294967295
   m_Materials:
   - {fileID: 2100000, guid: 22af96f9ba68eb54b9ce79bdf6661284, type: 2}
   m_StaticBatchInfo:
@@ -121,16 +120,15 @@ TrailRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1116644725694488}
-  m_Enabled: 0
+  m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
   m_MotionVectors: 1
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
-  m_RenderingLayerMask: 4294967295
   m_Materials:
-  - {fileID: 0}
+  - {fileID: 2100000, guid: 8c194649c42d5d54abe9700ada8d1b3a, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -157,15 +155,12 @@ TrailRenderer:
     widthCurve:
       serializedVersion: 2
       m_Curve:
-      - serializedVersion: 3
+      - serializedVersion: 2
         time: 0
         value: 0.48979568
         inSlope: 0
         outSlope: 0
         tangentMode: 0
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
@@ -205,7 +200,7 @@ TrailRenderer:
     generateLightingData: 0
   m_MinVertexDistance: 0.1
   m_Autodestruct: 0
---- !u!114 &114943509928414100
+--- !u!114 &114292898154829994
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -213,8 +208,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 1116644725694488}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6480297a9eb77fe4a902f2cc189d02c2, type: 3}
+  m_Script: {fileID: 11500000, guid: 2b720babb4a7ebb4a94c53fdd30ccc52, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  prefab_explosion: {fileID: 1549373087677006, guid: 2b79ec10654f26344816627d7515c1df,
-    type: 2}
+  explosion_prefab: {fileID: 0}
+  minDamage: 0
+  maxDamage: 0
+  radiusOfDamage: 0
+  destroyOnImpact: 1
+  clip: {fileID: 0}

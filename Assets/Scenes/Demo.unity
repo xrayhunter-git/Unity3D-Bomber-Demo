@@ -13,7 +13,7 @@ OcclusionCullingSettings:
 --- !u!104 &2
 RenderSettings:
   m_ObjectHideFlags: 0
-  serializedVersion: 9
+  serializedVersion: 8
   m_Fog: 0
   m_FogColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
   m_FogMode: 3
@@ -38,8 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
-  m_UseRadianceAmbientProbe: 0
+  m_IndirectSpecularColor: {r: 0.18028334, g: 0.22571328, b: 0.3069217, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -55,10 +54,11 @@ LightmapSettings:
     m_EnableBakedLightmaps: 1
     m_EnableRealtimeLightmaps: 1
   m_LightmapEditorSettings:
-    serializedVersion: 10
+    serializedVersion: 9
     m_Resolution: 2
     m_BakeResolution: 40
-    m_AtlasSize: 1024
+    m_TextureWidth: 1024
+    m_TextureHeight: 1024
     m_AO: 0
     m_AOMaxDistance: 1
     m_CompAOExponent: 1
@@ -172,7 +172,6 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
-  m_RenderingLayerMask: 4294967295
   m_Materials:
   - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
   m_StaticBatchInfo:
@@ -259,54 +258,25 @@ MonoBehaviour:
   speedMin: 5
   speedMax: 10
   rotationSpeedMin: 0.01
-  rotationSpeedMax: 0.1
+  rotationSpeedMax: 0.5
   AIBomber: 1
   AIBombBayEnabled: 1
+  AIPredictions: 3
+  AIMoveOnTimeout: 60
   dropPayloads:
   - {fileID: 56963733}
   bombs:
-  - prefab: {fileID: 1603789736006872, guid: ea16bcf582184f64094853145a87ba32, type: 2}
-    explosion_prefab: {fileID: 1971763284151804, guid: 9005ff1a93f67ff49bfae5a0f3732891,
+  - prefab: {fileID: 1116644725694488, guid: 797aee4ee2cc95b4bac37fdabbe49198, type: 2}
+    explosion_prefab: {fileID: 1000011797152326, guid: acf39d9f4addf294d93fa56fa373961b,
       type: 2}
     audio: {fileID: 8300000, guid: 2591f7f5acc84114295f9ef88a16238b, type: 3}
     chanceOfSpawn: 100
-    minDamage: 50
-    maxDamage: 100
-    radiusOfDamage: 20
-  - prefab: {fileID: 1603789736006872, guid: ea16bcf582184f64094853145a87ba32, type: 2}
-    explosion_prefab: {fileID: 1971763284151804, guid: 9005ff1a93f67ff49bfae5a0f3732891,
-      type: 2}
-    audio: {fileID: 8300000, guid: 2591f7f5acc84114295f9ef88a16238b, type: 3}
-    chanceOfSpawn: 100
-    minDamage: 50
-    maxDamage: 100
-    radiusOfDamage: 20
-  - prefab: {fileID: 1603789736006872, guid: ea16bcf582184f64094853145a87ba32, type: 2}
-    explosion_prefab: {fileID: 1971763284151804, guid: 9005ff1a93f67ff49bfae5a0f3732891,
-      type: 2}
-    audio: {fileID: 8300000, guid: 2591f7f5acc84114295f9ef88a16238b, type: 3}
-    chanceOfSpawn: 100
-    minDamage: 50
-    maxDamage: 100
-    radiusOfDamage: 20
-  - prefab: {fileID: 1603789736006872, guid: ea16bcf582184f64094853145a87ba32, type: 2}
-    explosion_prefab: {fileID: 1971763284151804, guid: 9005ff1a93f67ff49bfae5a0f3732891,
-      type: 2}
-    audio: {fileID: 8300000, guid: 2591f7f5acc84114295f9ef88a16238b, type: 3}
-    chanceOfSpawn: 100
-    minDamage: 50
-    maxDamage: 100
-    radiusOfDamage: 20
-  - prefab: {fileID: 1603789736006872, guid: ea16bcf582184f64094853145a87ba32, type: 2}
-    explosion_prefab: {fileID: 1971763284151804, guid: 9005ff1a93f67ff49bfae5a0f3732891,
-      type: 2}
-    audio: {fileID: 8300000, guid: 2591f7f5acc84114295f9ef88a16238b, type: 3}
-    chanceOfSpawn: 100
+    effectDeletionDelay: 5
     minDamage: 50
     maxDamage: 100
     radiusOfDamage: 20
   unlimitedAmmo: 1
-  bombYOffset: 5
+  bombBayOffset: {x: 0, y: 0, z: 0}
   bombSpacing: 2
   waypoints:
   - {x: 0, y: 45, z: 0}
@@ -320,7 +290,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 460342984}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 38.782238, y: 8.3258005e-17, z: -37.49607}
+  m_LocalPosition: {x: 177.3, y: 8.3258005e-17, z: -37.49607}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 2040949319}
@@ -355,6 +325,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 74019b70023ad6743a199a96d6c4470e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  RadarDetectionRadius: 500
+  ScanTimer: 5
+  alarm: {fileID: 0}
 --- !u!82 &777286106
 AudioSource:
   m_ObjectHideFlags: 0
@@ -384,96 +357,72 @@ AudioSource:
   rolloffCustomCurve:
     serializedVersion: 2
     m_Curve:
-    - serializedVersion: 3
+    - serializedVersion: 2
       time: 0.11511129
       value: 1
       inSlope: -8.690732
       outSlope: -8.690732
       tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    - serializedVersion: 3
+    - serializedVersion: 2
       time: 0.23022258
       value: 0.5
       inSlope: -2.172683
       outSlope: -2.172683
       tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    - serializedVersion: 3
+    - serializedVersion: 2
       time: 0.46044517
       value: 0.25
       inSlope: -0.54317075
       outSlope: -0.54317075
       tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    - serializedVersion: 3
+    - serializedVersion: 2
       time: 0.7512431
       value: 0.10858154
       inSlope: -0.13579269
       outSlope: -0.13579269
       tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    - serializedVersion: 3
+    - serializedVersion: 2
       time: 1
       value: 0.0034779906
       inSlope: -0.115157105
       outSlope: -0.115157105
       tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
   panLevelCustomCurve:
     serializedVersion: 2
     m_Curve:
-    - serializedVersion: 3
+    - serializedVersion: 2
       time: 0
       value: 0
       inSlope: 0
       outSlope: 0
       tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
   spreadCustomCurve:
     serializedVersion: 2
     m_Curve:
-    - serializedVersion: 3
+    - serializedVersion: 2
       time: 0
       value: 0
       inSlope: 0
       outSlope: 0
       tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
   reverbZoneMixCustomCurve:
     serializedVersion: 2
     m_Curve:
-    - serializedVersion: 3
+    - serializedVersion: 2
       time: 0
       value: 1
       inSlope: 0
       outSlope: 0
       tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
@@ -514,7 +463,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 981175389}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 10.3, y: 2.4, z: -2}
+  m_LocalPosition: {x: 10.3, y: 0, z: -2}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -532,32 +481,28 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   healthyStage:
-    prefab: {fileID: 1142404392276328, guid: f5f3d23ae0d9fc34eb150d4c4674a95a, type: 2}
-    debreEffects_damaged:
-    - prefab: {fileID: 1257544319874780, guid: 3d6755cd205c1814a893f96ca90057a0, type: 2}
-      deletionDelay: 0
-      offsets: {x: 0, y: 0, z: 0}
-    debreEffects_destruction:
-    - prefab: {fileID: 1971763284151804, guid: 9005ff1a93f67ff49bfae5a0f3732891, type: 2}
-      deletionDelay: 25
-      offsets: {x: 0, y: 0, z: 0}
-    - prefab: {fileID: 1257544319874780, guid: 3d6755cd205c1814a893f96ca90057a0, type: 2}
-      deletionDelay: 25
-      offsets: {x: 0, y: 0, z: 0}
+    prefab: {fileID: 1418571016652894, guid: 80ac00a6b41e2f34b87dd10d8e2e2dd1, type: 2}
+    offset: {x: 0, y: 0, z: 0}
+    destruction_offset: {x: 0, y: -50, z: 0}
+    destruction_speed: 0.02
+    debreEffects_damaged: []
+    debreEffects_destruction: []
+    delaySwitch: 20
     health: 0
   unhealthyStage:
-    prefab: {fileID: 1869074964243270, guid: 164e330b373f2a240b2d7c11ad2146b3, type: 2}
+    prefab: {fileID: 1390183093977470, guid: 3e1a8cd1d4498a641bb75f1a18792b7e, type: 2}
+    offset: {x: -6.5, y: 0, z: 1.5}
+    destruction_offset: {x: 0, y: -50, z: 0}
+    destruction_speed: 0.02
     debreEffects_damaged:
     - prefab: {fileID: 1257544319874780, guid: 3d6755cd205c1814a893f96ca90057a0, type: 2}
-      deletionDelay: 0
+      deletionDelay: 5
       offsets: {x: 0, y: 0, z: 0}
     debreEffects_destruction:
-    - prefab: {fileID: 1971763284151804, guid: 9005ff1a93f67ff49bfae5a0f3732891, type: 2}
-      deletionDelay: 0
-      offsets: {x: 0, y: 0, z: 0}
-    - prefab: {fileID: 1257544319874780, guid: 3d6755cd205c1814a893f96ca90057a0, type: 2}
-      deletionDelay: 0
-      offsets: {x: 0, y: 0, z: 0}
+    - prefab: {fileID: 1119487697541066, guid: c11e16b12659d3d449670ce85f75f2e3, type: 2}
+      deletionDelay: 15
+      offsets: {x: -3.25, y: 5, z: -5}
+    delaySwitch: 20
     health: 0
   destroyOnDeath: 0
   maxHealth: 100
@@ -764,7 +709,6 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
-  m_RenderingLayerMask: 4294967295
   m_Materials:
   - {fileID: 2100000, guid: a090e685ca435da468177ae34a427220, type: 2}
   m_StaticBatchInfo:
