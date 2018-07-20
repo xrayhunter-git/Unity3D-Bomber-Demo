@@ -30,15 +30,15 @@ namespace xrayhunter.WWIIBomber
 
         public float speedMin = 5.0f;
         public float speedMax = 10.0f;
+        public float enginePower = 0.05f;
+        public float brakingPower = 0.02f;
         public float rotationSpeedMin = 0.01f;
         public float rotationSpeedMax = 0.1f;
 
         public bool AIBomber = true;
         public bool AIBombBayEnabled = true;
 
-        public int AIPredictions = 3;
-
-        public int AIMoveOnTimeout = 60;
+        public float AIMoveOnTimeout = 60;
 
         public List<Transform> dropPayloads;
 
@@ -70,6 +70,8 @@ namespace xrayhunter.WWIIBomber
 
         void Start()
         {
+            lastWaypointTime = AIMoveOnTimeout;
+            bombReleaseCounter = -paddingTime;
             if (dropPayloads == null && dropPayloads.Count == 0)
             {
                 GameObject dropPayloadObj = new GameObject();
@@ -90,7 +92,21 @@ namespace xrayhunter.WWIIBomber
 
                     foreach (Transform dropPayload in dropPayloads)
                     {
-                        if (Vector3.Distance(this.transform.position, dropPayload.position) <= paddingTime + 10 + bombs.Count + speed)
+
+                        if (Vector3.Distance(this.transform.position, dropPayload.position) <= speed + bombs.Count + (paddingTime * 4))
+                        {
+                            speed = Mathf.Lerp(speed, brakingPower + (Mathf.Abs(Vector3.Distance(this.transform.position, dropPayload.position) * 0.05f)), Time.deltaTime);
+                            rotationSpeed = Mathf.Lerp(rotationSpeed, brakingPower + ((Mathf.Abs(Vector3.Distance(this.transform.position, dropPayload.position) + speed) * 0.05f)), Time.deltaTime);
+                        }
+                        else
+                        {
+                            speed += enginePower;
+                        }
+
+                        speed = Mathf.Clamp(speed, speedMin, speedMax);
+                        rotationSpeed = Mathf.Clamp(rotationSpeed, rotationSpeedMin, rotationSpeedMax);
+
+                        if (Vector3.Distance(this.transform.position, dropPayload.position) <= paddingTime + bombs.Count + speed)
                         {
                             // Start dropping payload.
                             if (bombReleaseCounter <= 0)
@@ -115,8 +131,6 @@ namespace xrayhunter.WWIIBomber
                                     if (bombDropCounter > 5)
                                         bombDropCounter = 0;
 
-                                    speed = Mathf.Lerp(speed, speedMin, Time.deltaTime);
-
                                     Destroy(bomb, 60); // Despawn after 60 seconds to clear memory.
                                 }
 
@@ -128,13 +142,24 @@ namespace xrayhunter.WWIIBomber
 
             if (AIBomber)
             {
-                lastWaypointTime -= Time.deltaTime;
                 if (waypoints != null && waypoints.Length > 0)
                 {
+                    if (lastWaypointTime <= 0)
+                    {
+                        lastWaypointTime = AIMoveOnTimeout;
+                        waypointCounter++;
+                    }
+
                     if (waypointCounter < waypoints.Length && waypoints[waypointCounter] != null)
                     {
                         if (bombReleaseCounter <= -paddingTime)
                         {
+
+                            if (Vector3.Distance(this.transform.position, waypoints[waypointCounter]) > (paddingTime * 2) + speed)
+                            {
+                                this.lastWaypointTime -= Time.deltaTime;
+                            }
+
                             speed = Mathf.Lerp(speed, speedMax, Time.deltaTime);
 
                             float distance = Vector3.Distance(this.transform.position, waypoints[waypointCounter]);
@@ -146,14 +171,12 @@ namespace xrayhunter.WWIIBomber
                             transform.rotation = Quaternion.Slerp(transform.rotation, rotation, Time.deltaTime * rotationSpeed);
                         }
 
-                        speed = Mathf.Clamp(speed, speedMin, speedMax);
-
                         transform.Translate(Vector3.forward * Time.deltaTime * speed);
 
-                        lastWaypointTime = AIMoveOnTimeout;
 
-                        if (Vector3.Distance(this.transform.position, waypoints[waypointCounter]) <= 10 + speed || lastWaypointTime <= 0)
+                        if (Vector3.Distance(this.transform.position, waypoints[waypointCounter]) <= paddingTime + speed)
                         {
+                            lastWaypointTime = AIMoveOnTimeout;
                             waypointCounter++;
                         }
                     }
@@ -201,14 +224,22 @@ namespace xrayhunter.WWIIBomber
             if (dropPayloads != null)
             {
                 foreach (Transform dropPayload in dropPayloads)
-                    Gizmos.DrawWireSphere(dropPayload.transform.position, paddingTime + 10 + bombAmount + speed);
+                {
+                    Gizmos.color = Color.green;
+                    Gizmos.DrawWireSphere(dropPayload.transform.position, paddingTime + bombAmount + speed);
+                    Gizmos.color = Color.white;
+                    Gizmos.DrawWireSphere(dropPayload.transform.position, (paddingTime*4) + bombAmount + speed);
+                }
             }
 
             Gizmos.color = Color.yellow;
 
             foreach (Vector3 waypoint in waypoints)
             {
+                Gizmos.color = Color.yellow;
                 Gizmos.DrawWireCube(waypoint, new Vector3(1, 1, 1));
+                Gizmos.color = Color.white;
+                Gizmos.DrawWireSphere(waypoint, (paddingTime * 2) + bombAmount + speed);
             }
 
             Gizmos.color = Color.red;

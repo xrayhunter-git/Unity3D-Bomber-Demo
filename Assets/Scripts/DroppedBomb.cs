@@ -19,9 +19,12 @@ namespace xrayhunter.WWIIBomber
 
         public AudioClip clip;
 
+        public GameObject[] craterPrefabs;
+
         private bool exploded = false;
 
         private GameObject explosionFX;
+
 
         private void OnCollisionEnter(Collision collision) // Collision Trigger...
         {
@@ -53,7 +56,10 @@ namespace xrayhunter.WWIIBomber
                             {
                                 WWIIBuilding.DamageableStructure health = collider.GetComponent<WWIIBuilding.DamageableStructure>();
 
-                                health.Damage(Random.Range(minDamage, maxDamage) * (Vector3.Distance(this.transform.position, collider.transform.position) / 50));
+                                ContactPoint contact = collision.contacts[0];
+                                Vector3 pos = contact.point;
+
+                                health.Damage(Random.Range(minDamage, maxDamage) * (Vector3.Distance(this.transform.position, collider.transform.position) / 50), pos);
                             }
 
                             // Uncomment this for your project to add the health removal to npcs.
@@ -74,11 +80,33 @@ namespace xrayhunter.WWIIBomber
                                 Destroy(this.GetComponent<Rigidbody>());
                         }
 
+                        if (collision.gameObject.GetComponent<Terrain>() != null)
+                        {
+                            GameObject obj = GetRandomCrater();
+                            if (obj != null)
+                            {
+                                ContactPoint contact = collision.contacts[0];
+                                Quaternion rot = Quaternion.FromToRotation(Vector3.up, contact.normal);
+                                Vector3 pos = contact.point;
+                                GameObject crater = Instantiate(obj, pos, rot);
+
+                                Destroy(crater, 300);
+                            }
+                            
+                        }
+
                         Destroy(explosionFX, effectDeletionDelay); // Clean up effects that are laying around.
                     }
                 }
             }
         }
 
+
+        private GameObject GetRandomCrater()
+        {
+            if (craterPrefabs.Length == 0) return null;
+            int rand = Random.Range(0, craterPrefabs.Length);
+            return craterPrefabs[rand];
+        }
     }
 }

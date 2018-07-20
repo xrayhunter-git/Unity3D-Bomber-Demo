@@ -23,7 +23,7 @@ namespace xrayhunter.WWIIBuilding
         public float destruction_speed = 5.0f;
         public List<Debre> debreEffects_damaged;
         public List<Debre> debreEffects_destruction;
-        public int delaySwitch = 0;
+        public int delayDeletion = 0;
         public int health;
         public AudioClip[] damagedClips;
         public AudioClip[] destroyedClips;
@@ -33,10 +33,6 @@ namespace xrayhunter.WWIIBuilding
     public class DamageableStructure : MonoBehaviour
     {
         public List<StructureInfo> structureStages;
-
-        // Temporary until gets fixed...
-        public StructureInfo healthyStage;
-        public StructureInfo unhealthyStage;
 
         public bool destroyOnDeath = false;
 
@@ -60,6 +56,14 @@ namespace xrayhunter.WWIIBuilding
         // Use this for initialization
         void Start ()
         {
+            foreach (Transform trans in GetComponentsInChildren<Transform>())
+            {
+                if (trans != null && trans.gameObject != this.gameObject)
+                    DestroyImmediate(trans.gameObject);
+            }
+
+            UpdateStructure(true);
+
             health = maxHealth;
             if (GetComponents<AudioSource>().Length > 0)
                 sourceMain = GetComponents<AudioSource>()[0];
@@ -70,88 +74,97 @@ namespace xrayhunter.WWIIBuilding
                 sourceEffects = GetComponents<AudioSource>()[1];
             else
                 sourceEffects = this.gameObject.AddComponent<AudioSource>();
+
+            sourceMain.spatialBlend = 1;
+            sourceEffects.spatialBlend = 1;
         }
 	
 	    // Update is called once per frame
 	    void Update ()
         {
-		    if (health != lastHealth) // Stop the spam.
+            if (health != lastHealth) // Stop the spam.
             {
-                /*StructureInfo newDisplayObject = GrabNextStructure();
-                
-                Destroy(displayObject.gameObject);
-                displayObject = Instantiate(newDisplayObject.prefab, this.transform);
-                */
+                UpdateStructure();
 
-                StructureInfo info = healthyStage;
+                lastHealth = health;
+            }
 
-                if (health <= 50)
-                {
-                    info = unhealthyStage;
-                }
+	    }
 
+        
+        public void Damage(float damage, Vector3 hitpoint = new Vector3())
+        {
+            health -= damage;
+            lastHitpoint = hitpoint;
+        }
+
+        private void UpdateStructure(bool start = false)
+        {
+
+            StructureInfo info = GrabNextStructure();
+
+            if (info != null)
+            {
                 if (info != lastPrefab)
                 {
-                    sourceMain.clip = GetRandomClip(info.destroyedClips);
-                    if(sourceMain.clip != null && !sourceMain.isPlaying)
-                        sourceMain.Play();
-
-                    foreach (Debre debre in info.debreEffects_destruction)
+                    if (!start)
                     {
-                        GameObject obj = Instantiate(debre.prefab, this.transform.position + debre.offsets, debre.prefab.transform.rotation);
-                        obj.transform.parent = this.transform;
-                        Destroy(obj, debre.deletionDelay);
+
+                        foreach (Debre debre in info.debreEffects_destruction)
+                        {
+                            GameObject obj = Instantiate(debre.prefab, this.transform.position + debre.offsets, Quaternion.AngleAxis(0, Vector3.up));
+                            obj.transform.parent = this.transform;
+                            Destroy(obj, debre.deletionDelay);
+                        }
                     }
+
                     StructureInfo previousInfo = lastPrefab;
                     lastPrefab = info;
 
                     if (displayObject != null)
                     {
-                        if (lastPrefab.delaySwitch == 0)
+                        if (previousInfo.delayDeletion == 0)
                         {
                             Destroy(displayObject);
                         }
                         else
                         {
+
                             destroyedObject = displayObject;
                             StartCoroutine(DoDestroyAnimation(previousInfo.waitDestructionAnimation, destroyedObject, previousInfo));
-                            Destroy(displayObject, lastPrefab.delaySwitch);
+                            Destroy(destroyedObject, previousInfo.delayDeletion);
                         }
                     }
 
                     if (info != null && info.prefab != null)
                     {
-                        displayObject = Instantiate(info.prefab, this.transform.position + info.offset, info.prefab.transform.rotation);
+                        displayObject = Instantiate(info.prefab, this.transform.position + info.offset, transform.rotation * info.prefab.transform.rotation);
                         displayObject.name = "Display Object";
                         displayObject.transform.parent = this.transform;
                     }
                 }
-                
+
                 if (lastHitpoint != (new Vector3()))
                 {
-                    sourceEffects.clip = GetRandomClip(info.damagedClips);
-                    if (sourceEffects.clip != null && !sourceEffects.isPlaying)
-                        sourceEffects.Play();
+                    AudioClip clip = GetRandomClip(info.damagedClips);
+                    if (clip != null)
+                    {
+                        sourceEffects.clip = clip;
+                        sourceEffects.transform.position = lastHitpoint;
+                        if (sourceEffects.clip != null && !sourceEffects.isPlaying)
+                            sourceEffects.Play();
+                    }
 
                     foreach (Debre debre in info.debreEffects_damaged)
                     {
-                        GameObject obj = Instantiate(debre.prefab, this.lastHitpoint, debre.prefab.transform.rotation);
+                        GameObject obj = Instantiate(debre.prefab, this.lastHitpoint, Quaternion.AngleAxis(0, Vector3.up));
 
                         Destroy(obj, debre.deletionDelay);
                     }
 
                     lastHitpoint = new Vector3();
                 }
-
-                lastHealth = health;
             }
-
-	    }
-        
-        public void Damage(float damage, Vector3 hitpoint = new Vector3())
-        {
-            health -= damage;
-            lastHitpoint = hitpoint;
         }
 
         private AudioClip GetRandomClip(AudioClip[] clips)
@@ -166,10 +179,24 @@ namespace xrayhunter.WWIIBuilding
             if (beforeStartTime != 0)
                 yield return new WaitForSeconds(beforeStartTime);
 
+            AudioClip clip = GetRandomClip(lastInformation.destroyedClips);
+            if (clip != null)
+            {
+                if (lastInformation.debreEffects_destruction.Count > 0)
+                    sourceMain.transform.localPosition = lastInformation.debreEffects_destruction[0].offsets;
+
+                sourceMain.clip = clip;
+                sourceMain.pitch = lastInformation.destruction_speed - 1;
+                if (sourceMain.clip != null && !sourceMain.isPlaying)
+                    sourceMain.Play();
+            }
+
             if (lastObject != null && lastInformation != null)
             {
                 while (lastObject.transform.position.y > lastInformation.destruction_offset.y)
                 {
+                    if (lastObject == null && lastInformation == null) break;
+
                     Vector3 pos = lastObject.transform.position;
                     pos.y -= Time.deltaTime * lastInformation.destruction_speed;
                     lastObject.transform.position = pos;
@@ -184,19 +211,34 @@ namespace xrayhunter.WWIIBuilding
 
         private StructureInfo GrabNextStructure()
         {
+            if (structureStages == null || structureStages.Count == 0) return null;
+
             StructureInfo result = structureStages[0];
-
-            structureStages.Sort((x, y) => -x.health.CompareTo(y.health));
-
-            for(int i = 0; )
+            
+            for(int i = structureStages.Count - 1; i > 0; i--)
             {
-                if(info.health >= health)
+                if(structureStages[i].health >= health)
                 {
-                    return info;
+                    result = structureStages[i];
+                    break;
                 }
             }
 
             return result;
+        }
+
+        private void OnDrawGizmosSelected()
+        {
+            Gizmos.color = Color.magenta;
+
+            foreach(StructureInfo info in structureStages)
+            {
+                foreach(Debre debre in info.debreEffects_destruction)
+                {
+                    Gizmos.DrawCube(debre.offsets + this.transform.position, new Vector3(1, 1, 1));
+                }
+            }
+
         }
     }
 
