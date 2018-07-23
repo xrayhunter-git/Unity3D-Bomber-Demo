@@ -1,0 +1,155 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &100100000
+Prefab:
+  m_ObjectHideFlags: 1
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications: []
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 0}
+  m_RootGameObject: {fileID: 1003302823112410}
+  m_IsPrefabParent: 1
+--- !u!1 &1003302823112410
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 4413353214077566}
+  - component: {fileID: 114663049611211682}
+  m_Layer: 0
+  m_Name: Bomber Plane
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &1772324140409968
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 4544556775749344}
+  - component: {fileID: 33249160603854416}
+  - component: {fileID: 23248720080936114}
+  m_Layer: 0
+  m_Name: Model
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4413353214077566
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1003302823112410}
+  m_LocalRotation: {x: 0, y: -0.7071068, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: 575.7, y: 86.74, z: 60}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 4544556775749344}
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
+--- !u!4 &4544556775749344
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1772324140409968}
+  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
+  m_LocalPosition: {x: -0.009783621, y: 2.425644, z: -0.42653322}
+  m_LocalScale: {x: 36.563023, y: 38.291683, z: 39.184822}
+  m_Children: []
+  m_Father: {fileID: 4413353214077566}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
+--- !u!23 &23248720080936114
+MeshRenderer:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1772324140409968}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_Materials:
+  - {fileID: 2100000, guid: a090e685ca435da468177ae34a427220, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 0
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+--- !u!33 &33249160603854416
+MeshFilter:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1772324140409968}
+  m_Mesh: {fileID: 4300000, guid: 57d8c6ff6f884bb4bb31e8a3ef63cc1c, type: 3}
+--- !u!114 &114663049611211682
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1003302823112410}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fed3a5f5088bcd346877b9d95df408f8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  paddingTime: 15
+  speedMin: 10
+  speedMax: 20
+  enginePower: 0.05
+  brakingPower: 0.02
+  rotationSpeedMin: 0.01
+  rotationSpeedMax: 0.15
+  AIBomber: 1
+  AIBombBayEnabled: 1
+  AIMoveOnTimeout: 120
+  dropPayloads:
+  - {fileID: 0}
+  bombs:
+  - prefab: {fileID: 1116644725694488, guid: 797aee4ee2cc95b4bac37fdabbe49198, type: 2}
+    explosion_prefab: {fileID: 1000011797152326, guid: acf39d9f4addf294d93fa56fa373961b,
+      type: 2}
+    audio: {fileID: 8300000, guid: e18a9b99988d95048b365ca2292e5e52, type: 3}
+    chanceOfSpawn: 100
+    effectDeletionDelay: 2
+    minDamage: 50
+    maxDamage: 100
+    radiusOfDamage: 20
+  unlimitedAmmo: 1
+  bombBayOffset: {x: 0, y: 0, z: 0}
+  bombSpacing: 2
+  waypoints:
+  - {x: 0, y: 45, z: 0}
+  - {x: 750, y: 45, z: 0}
+  destroyAtFinalWaypoint: 0
+  bombReleaseDelay: 0.5
